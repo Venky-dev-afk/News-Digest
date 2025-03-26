@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Auth Page</title>
+    <link rel="stylesheet" href="SignUp.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome to NewsDigest</h1>
+      <p>Your personalized AI-powered news feed.</p>
+
+      <div class="auth-container">
+        <!-- Login Form -->
+        <div class="auth-box">
+          <h2>Login</h2>
+          <input type="email" id="email" placeholder="Email" />
+          <input type="password" id="password" placeholder="Password" />
+          <button id="login-btn">Login</button>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div class="auth-box">
+          <h2>Sign Up</h2>
+          <input type="email" id="signup-email" placeholder="Email" />
+          <input type="password" id="signup-password" placeholder="Password" />
+          <button id="signup-btn">Sign Up</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ✅ Fixing import -->
+    <script type="module">
+      import { NhostClient } from "https://cdn.jsdelivr.net/npm/@nhost/nhost-js@latest/+esm";
+
+      // ✅ Initialize Nhost
+      const nhost = new NhostClient({
+        subdomain: "ldexggoppwitfgltnaoo", // Replace with your actual subdomain
+        region: "ap-south-1", // Replace with your actual region
+      });
+
+      console.log("Nhost initialized:", nhost);
+
+      // ✅ Login function
+      document
+        .getElementById("login-btn")
+        .addEventListener("click", async () => {
+          console.log("Login button clicked");
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          try {
+            const { session, error } = await nhost.auth.signIn({
+              email,
+              password,
+            });
+
+            if (error) {
+              console.error("Login failed:", error.message);
+              alert("Login failed: " + error.message);
+            } else {
+              console.log("Login successful", session);
+              alert("Login successful!");
+            }
+          } catch (err) {
+            console.error("Login error:", err);
+          }
+        });
+
+      // ✅ Sign-up function
+      document
+        .getElementById("signup-btn")
+        .addEventListener("click", async () => {
+          console.log("Sign Up button clicked");
+          const email = document.getElementById("signup-email").value;
+          const password = document.getElementById("signup-password").value;
+
+          try {
+            const { session, error } = await nhost.auth.signUp({
+              email,
+              password,
+            });
+
+            if (error) {
+              console.error("Sign-up failed:", error.message);
+              alert("Sign-up failed: " + error.message);
+            } else {
+              console.log("Sign-up successful", session);
+              alert("Sign-up successful!");
+            }
+          } catch (err) {
+            console.error("Sign-up error:", err);
+          }
+        });
+    </script>
+  </body>
+</html>

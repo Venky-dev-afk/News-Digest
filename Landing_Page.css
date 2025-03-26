@@ -1,0 +1,180 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Nunito', sans-serif;
+}
+
+/* Background Gradient */
+body {
+    background: linear-gradient(135deg, #FF9A8B, #FF6A88, #FF99AC);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+}
+
+/* Navigation Bar */
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 30px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    transform: translateY(-20px);
+    animation: fadeInDown 1s ease-out forwards;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Login Button */
+.login-btn {
+    background: #1E3A8A;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.login-btn:hover {
+    background: #233C93;
+    transform: scale(1.1);
+}
+
+/* Hero Section */
+.hero {
+    max-width: 600px;
+    padding: 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: fadeInUp 1s ease-out 0.5s forwards;
+}
+
+/* Hero Text */
+.hero h1 {
+    font-size: 60px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    animation: textPop 1.2s ease-out 0.8s forwards;
+    transform: scale(0.9);
+    opacity: 0;
+}
+
+/* Hero Description */
+.hero p {
+    font-size: 24px;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeIn 1s ease-out 1s forwards;
+}
+
+/* CTA Button */
+.cta-btn {
+    background: #1E3A8A;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background 0.3s ease;
+    opacity: 0;
+    animation: fadeInUp 1s ease-out 1.2s forwards, pulse 2s infinite ease-in-out;
+}
+
+/* Hover Effect - Slight Bounce */
+.cta-btn:hover {
+    background: #233C93;
+    transform: scale(1.1) translateY(-5px);
+}
+
+/* Active Click Effect */
+.cta-btn:active {
+    transform: scale(0.95);
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+/* Keyframe Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes textPop {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 600px) {
+    .hero h1 {
+        font-size: 28px;
+    }
+
+    .hero p {
+        font-size: 16px;
+    }
+
+    .cta-btn {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+}
