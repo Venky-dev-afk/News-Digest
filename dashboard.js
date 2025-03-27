@@ -6,6 +6,27 @@ const nhost = new NhostClient({
   region: "ap-south-1",
 });
 
+// ✅ Logout Function
+document.getElementById("logout-btn").addEventListener("click", async () => {
+  try {
+    await nhost.auth.signOut();
+    alert("Logged out successfully!");
+    window.location.href = "Landing_Page.html"; // Redirect to login page
+  } catch (error) {
+    console.error("Logout failed:", error);
+  }
+});
+
+// ✅ Protect Dashboard: Redirect if not logged in
+async function checkAuth() {
+  const isAuthenticated = await nhost.auth.isAuthenticatedAsync();
+  if (!isAuthenticated) {
+    window.location.href = "index.html"; // Redirect to login page
+  }
+}
+
+checkAuth(); // Call function to check login status
+
 // ✅ Check if the user is logged in
 const authToken = window.localStorage.getItem("authToken");
 if (!authToken) {
