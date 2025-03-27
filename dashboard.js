@@ -11,7 +11,7 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
   try {
     await nhost.auth.signOut();
     alert("Logged out successfully!");
-    window.location.href = "Landing_Page.html"; // Redirect to login page
+    window.location.href = "index.html"; // Redirect to login page
   } catch (error) {
     console.error("Logout failed:", error);
   }
@@ -30,7 +30,7 @@ checkAuth(); // Call function to check login status
 // ✅ Check if the user is logged in
 const authToken = window.localStorage.getItem("authToken");
 if (!authToken) {
-  window.location.href = "login.html"; // Redirect to login if not authenticated
+  window.location.href = "SignUp.html"; // Redirect to login if not authenticated
 }
 
 // GraphQL Query for fetching news
