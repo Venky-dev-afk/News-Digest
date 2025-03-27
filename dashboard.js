@@ -6,26 +6,31 @@ const nhost = new NhostClient({
   region: "ap-south-1",
 });
 
-async function fetchNews() {
-  const authToken = await nhost.auth.getSession()?.accessToken;
+// ✅ Check if the user is logged in
+const authToken = window.localStorage.getItem("authToken");
+if (!authToken) {
+  window.location.href = "login.html"; // Redirect to login if not authenticated
+}
 
-  const QUERY_NEWS_DIGEST = `
-    query {
-      news_digest {
-        summary
-        sentiment
-      }
+// GraphQL Query for fetching news
+const QUERY_NEWS_DIGEST = `
+  query {
+    news_digest {
+      summary
+      sentiment
     }
-  `;
+  }
+`;
 
+async function fetchNews() {
   try {
     const response = await fetch("https://ldexggoppwitfgltnaoo.hasura.ap-south-1.nhost.run/v1/graphql", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        ...(authToken ? { "Authorization": `Bearer ${authToken}` } : {}),
+        "Authorization": `Bearer ${authToken}` // ✅ Use stored token
       },
-      body: JSON.stringify({ query: QUERY_NEWS_DIGEST }),
+      body: JSON.stringify({ query: QUERY_NEWS_DIGEST })
     });
 
     const data = await response.json();
@@ -49,20 +54,22 @@ function displayNews(newsArticles) {
     const newsCard = document.createElement("div");
     newsCard.classList.add("news-card");
 
-    let sentimentColor = "#ddd"; // Default color
-    if (news.sentiment === "Positive") sentimentColor = "#22c55e"; // Green
-    else if (news.sentiment === "Negative") sentimentColor = "#ef4444"; // Red
-    else if (news.sentiment === "Neutral") sentimentColor = "#facc15"; // Yellow
+    let sentimentColor = "#ddd";
+    if (news.sentiment === "Positive") sentimentColor = "#22c55e";
+    else if (news.sentiment === "Negative") sentimentColor = "#ef4444";
+    else if (news.sentiment === "Neutral") sentimentColor = "#facc15";
 
     newsCard.innerHTML = `
-      <p>${news.summary}</p>
-      <span class="sentiment" style="background: ${sentimentColor};">
-        ${news.sentiment}
-      </span>
+      <div class="card-content">
+        <p class="news-summary">${news.summary}</p>
+        <span class="sentiment" style="background: ${sentimentColor};">${news.sentiment}</span>
+      </div>
     `;
 
     container.appendChild(newsCard);
   });
 }
 
+// ✅ Fetch news on page load
 document.addEventListener("DOMContentLoaded", fetchNews);
+  

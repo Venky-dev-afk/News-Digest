@@ -33,66 +33,88 @@
     <!-- ✅ Fixing import -->
     <script type="module">
       import { NhostClient } from "https://cdn.jsdelivr.net/npm/@nhost/nhost-js@latest/+esm";
-
+    
       // ✅ Initialize Nhost
       const nhost = new NhostClient({
         subdomain: "ldexggoppwitfgltnaoo", // Replace with your actual subdomain
         region: "ap-south-1", // Replace with your actual region
       });
-
+    
       console.log("Nhost initialized:", nhost);
-
+    
+      // ✅ Check if user is already logged in
+      async function checkAuth() {
+        const session = await nhost.auth.getSession();
+        if (session) {
+          console.log("User already logged in, redirecting...");
+          window.location.href = "dashboard.html"; // Redirect if logged in
+        }
+      }
+    
+      checkAuth(); // Call the function on page load
+    
+      // ✅ Logout function (called before login/signup if user is already signed in)
+      async function ensureLoggedOut() {
+        const session = await nhost.auth.getSession();
+        if (session) {
+          console.log("User already signed in, logging out first...");
+          await nhost.auth.signOut();
+        }
+      }
+    
       // ✅ Login function
-      document
-        .getElementById("login-btn")
-        .addEventListener("click", async () => {
+      document.addEventListener("DOMContentLoaded", () => {
+        document.getElementById("login-btn").addEventListener("click", async () => {
           console.log("Login button clicked");
           const email = document.getElementById("email").value;
           const password = document.getElementById("password").value;
-
+    
+          await ensureLoggedOut(); // 🔥 Log out existing session before login
+    
           try {
-            const { session, error } = await nhost.auth.signIn({
-              email,
-              password,
-            });
-
+            const { session, error } = await nhost.auth.signIn({ email, password });
+    
             if (error) {
               console.error("Login failed:", error.message);
               alert("Login failed: " + error.message);
             } else {
               console.log("Login successful", session);
-              alert("Login successful!");
+              localStorage.setItem("authToken", session.accessToken); // ✅ Store token
+              alert("Login successful! Redirecting...");
+              window.location.href = "dashboard.html"; // ✅ Redirect
             }
           } catch (err) {
             console.error("Login error:", err);
           }
         });
-
-      // ✅ Sign-up function
-      document
-        .getElementById("signup-btn")
-        .addEventListener("click", async () => {
+    
+        // ✅ Sign-up function
+        document.getElementById("signup-btn").addEventListener("click", async () => {
           console.log("Sign Up button clicked");
           const email = document.getElementById("signup-email").value;
           const password = document.getElementById("signup-password").value;
-
+    
+          await ensureLoggedOut(); // 🔥 Log out existing session before signup
+    
           try {
-            const { session, error } = await nhost.auth.signUp({
-              email,
-              password,
-            });
-
+            const { session, error } = await nhost.auth.signUp({ email, password });
+    
             if (error) {
               console.error("Sign-up failed:", error.message);
               alert("Sign-up failed: " + error.message);
             } else {
               console.log("Sign-up successful", session);
-              alert("Sign-up successful!");
+              localStorage.setItem("authToken", session.accessToken); // ✅ Store token
+              alert("Sign-up successful! Redirecting...");
+              window.location.href = "dashboard.html"; // ✅ Redirect
             }
           } catch (err) {
             console.error("Sign-up error:", err);
           }
         });
+      });
     </script>
+    
+    
   </body>
 </html>
